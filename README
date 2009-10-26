@@ -1,0 +1,67 @@
+About
+^^^^^
+This is an implementation of Renato Cunha's own interpretation of
+the Space Invaders game/atmosphere.
+
+Build Instructions
+^^^^^ ^^^^^^^^^^^^
+For installation instructions, please refer to the INSTALL file. If you don't
+want to read that file, here are the basic instructions:
+
+On an UNIX-like system, the canonic form will work:
+ * ./configure
+ * make
+The game will be located in the src directory. If you want to install it, just
+call:
+ * make install
+
+Please notice that you'll need OpenGL + glut development packages and, on
+non-MacOSX systems, the X11 development packages.
+
+On Windows:
+ Assuming that you have installed mingw and msys on the default directories,
+issuing
+ * make -f Makefile.win
+from msys's prompt should work.
+
+Gameplay notes
+^^^^^^^^ ^^^^^
+As you might know already, your objective in this game is to destroy the nasty
+aliens that are trying to invade Earth. You are Earth's last hope against the
+alien hordes. To accomplish your mission, you must control your space-adapted
+airplane. The game controls are mouse-based. Move your mouse towards the
+window right border and your ship will move right. Move it to the left border,
+and it will move left. If you don't want it to move at all, leave your mouse
+in the window's center. To shoot, just left click your mouse.
+
+Additional controls
+^^^^^^^^^^ ^^^^^^^^
+* Right click or 'p' key - (un)pause game
+* Middle click or 'd' key - Enters debug mode (pauses the game and prints the
+  game objects' parameters to a console
+* Pressing the 'r' key restarts the game
+
+Implementation notes
+^^^^^^^^^^^^^^ ^^^^^
+While implementing this game I decided to do an exercise on modularization in
+an object-oriented way. So each game object is implemented in its own class
+that derives from the GameObj base class. There is also a world class,
+responsible for managing the game objects.
+
+To try to keep the class coupling to a minimum, an entity manager (that stores
+all game objects) was implemented, along with a message-passing system (so
+that game objects communicate via message passing, instead of calling each
+others methods) comprised of a message dispatcher and a basic message class,
+called Telegram. The basics of the this "technique"(?) can be found on the
+book "Programming Game AI by Example", by Mat Buckland. The Game class is
+responsible for handling input, FPS-limiting, and drawing the interface only
+(each object is responsible for drawing itself).
+
+Originally, I tried to keep the design as clean as possible. Unfortunately, I
+eventually forgot to examine some class interaction properties, and that made
+me add some inconsistencies to the class hierarchy. Well, that's the way life
+is.
+
+Some macro implementation ideas, like DebugPrint, were taken from stratagus,
+an open source RTS engine.
+

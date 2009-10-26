@@ -1,0 +1,8 @@
+all: tgalaxy.exe
+
+tgalaxy.exe: alien.cpp alienstates.cpp defender.cpp dispatcher.cpp entitymanager.cpp game.cpp game_constants.cpp gameobj.cpp main.cpp printer.cpp projectile.cpp star.cpp world.cpp
+	g++ *.cpp -o tgalaxy.exe -DFREEGLUT_STATIC -I/mingw/include -L/mingw/lib -I./include -I.. -lfreeglut_static -lglu32 -lopengl32 -lwinmm -lgdi32 -Wl,--subsystem,windows
+
+clean:
+	rm -fr tgalaxy.exe
+

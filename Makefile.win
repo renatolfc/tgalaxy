@@ -1,0 +1,5 @@
+all: src/tgalaxy.exe
+
+src/tgalaxy.exe:
+	cd src; make -f Makefile.win all
+
