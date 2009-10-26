@@ -39,6 +39,11 @@
 	#include <GL/glut.h>
 #endif // __APPLE__
 
+#ifdef WIN32
+	// FIXME: Should remove it
+	#define random rand
+#endif
+
 #define _C_  ,    /// Debug , to simulate vararg macros
 
 #define PrintFunction() \
