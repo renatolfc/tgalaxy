@@ -29,7 +29,6 @@
 #ifndef TGALAXY_H
 #define TGALAXY_H
 
-#include <config.h>
 #include <sys/time.h>
 
 #ifdef __APPLE__
