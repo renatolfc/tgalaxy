@@ -61,7 +61,7 @@ void Printer::build_font() {
 		glTranslated(10, 0, 0);
 		glEndList();
 	}
-	DebugPrint("Font build\n");
+	DebugPrint("Font built\n");
 }
 
 void Printer::kill_font() {
