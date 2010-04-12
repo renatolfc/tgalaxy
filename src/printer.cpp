@@ -95,7 +95,7 @@ Printer::~Printer() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Printer::print(int x, int y, char *string, int set) {
+void Printer::print(int x, int y, const char *string, int set) {
 	glEnable(GL_TEXTURE_2D);
 
 	if(set > 1) {
