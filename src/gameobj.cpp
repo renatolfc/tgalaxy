@@ -37,7 +37,7 @@ bool GameObj::collides(GameObj *other, int ignore) {
         return false;
     }
 
-    if(other->my_type == ignore) {
+    if(other->type == ignore) {
         return false;
     }
 

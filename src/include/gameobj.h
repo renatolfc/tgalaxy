@@ -44,13 +44,13 @@ class GameObj {
 	friend class EntityManager;
 
 	protected:
-		int my_id;
+		int id;
 
-		int my_type;
-		
+		int type;
+
 		double x, y; // left top
 		int vel_x, vel_y;
-		int w, h; // width + height
+		int w, h; // width, height
 
 	private:
 
@@ -61,15 +61,15 @@ class GameObj {
 
 	public:
 
-		GameObj(int type, 
+		GameObj(int type,
 				int px = 0,
 				int py = 0,
 				int vx = 0,
 				int vy = 0,
 				int width = 32,
 				int height = 32) :
-			my_id(next_valid_id()),
-			my_type(type),
+			id(next_valid_id()),
+			type(type),
 			x(px),
 			y(py),
 			vel_x(vx),
@@ -92,12 +92,12 @@ class GameObj {
 			return false;
 		}
 
-		int id() const {
-			return my_id;
+		int get_id() const {
+			return id;
 		}
 
-		int type() const {
-			return my_type;
+		int get_type() const {
+			return type;
 		}
 
 		virtual void get_position(int &px, int &py) {

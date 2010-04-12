@@ -62,10 +62,10 @@ void Projectile::update(double elapsed_time) {
 
 	if(temp != NULL) {
 		// Collided with something
-		if(temp->type() == PROJECTILE_TYPE) {
+		if(temp->get_type() == PROJECTILE_TYPE) {
 			entities.destroy_entity(temp);
 		} else {
-			dispatcher.dispatch_message(0, id(), temp->id(), MSG_BEEN_HIT, NULL);
+			dispatcher.dispatch_message(0, get_id(), temp->get_id(), MSG_BEEN_HIT, NULL);
 		}
 		dispatcher.broadcast(0, SENDER_ID_IRRELEVANT, RECEIVER_TYPE_IRRELEVANT,
 				MSG_PROJECTILE_COLLISION, NULL);
@@ -101,12 +101,12 @@ void Projectile::draw() {
 }
 
 Projectile::~Projectile() {
-	dispatcher.dispatch_message(0, id(), shooter_id, MSG_PROJECTILE_DESTROYED, NULL);
+	dispatcher.dispatch_message(0, get_id(), shooter_id, MSG_PROJECTILE_DESTROYED, NULL);
 }
 
 void Projectile::print() {
 	using namespace std;
-	cout << "Projectile with global id " << my_id << endl;
+	cout << "Projectile with global id " << id << endl;
 	cout << "\tCoordinates: " << x << " " << y << endl;
 	cout << "\tVelocities: " << vel_x << " " << vel_y << endl;
 	cout << "\tDimensions: " << w << " " << h << endl;

@@ -89,7 +89,7 @@ void Defender::update(double elapsed_time) {
 
 void Defender::print() {
     using namespace std;
-    cout << "Defender (player) with global id " << my_id << endl;
+    cout << "Defender (player) with global id " << id << endl;
     cout << "\tCoordinates: " << x << ' ' << y << endl;
     cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
     cout << "\tDimensions: " << w << ' ' << h << endl;
@@ -110,7 +110,7 @@ void Defender::set_speed(int vx) {
 void Defender::shoot() {
     if(current_shots <= maximum_shots) {
        current_shots += 1;
-       Projectile *p = new Projectile(x + (w >> 1), y, N, DEFENDER_TYPE, id(), world);
+       Projectile *p = new Projectile(x + (w >> 1), y, N, DEFENDER_TYPE, get_id(), world);
        entities.register_entity(p);
     }
 }

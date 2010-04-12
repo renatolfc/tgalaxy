@@ -49,7 +49,7 @@ bool EntityManager::remove_entity(GameObj *entity) {
         remove_buffer.push(entity);
     }
     else {
-        EntityMap::const_iterator ent = entities.find(entity->id());
+        EntityMap::const_iterator ent = entities.find(entity->get_id());
         if(ent != entities.end()) {
             entities.erase(ent->first);
             return true;
@@ -80,7 +80,7 @@ void EntityManager::register_entity(GameObj *new_entity) {
         insert_buffer.push(new_entity);
     }
     else {
-        entities.insert(std::make_pair(new_entity->id(), new_entity));
+        entities.insert(std::make_pair(new_entity->get_id(), new_entity));
     }
 }
 
@@ -92,10 +92,10 @@ GameObj *EntityManager::check_collision(GameObj *requester, int ignore) {
         temp = (*itr).second;
 
         if(requester->collides(temp, ignore)) {
-            if(temp->type() == STAR_TYPE) {
+            if(temp->get_type() == STAR_TYPE) {
                 continue;
             }
-            if(temp->type() == ALIEN_TYPE) {
+            if(temp->get_type() == ALIEN_TYPE) {
                 Alien *a = dynamic_cast<Alien *>(temp);
                 if(a->current_energy() <= 0) {
                     continue;

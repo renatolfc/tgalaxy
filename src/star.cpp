@@ -53,7 +53,7 @@ void Star::draw() {
 
 void Star::print() {
     using namespace std;
-    cout << "Star with global id " << my_id << endl;
+    cout << "Star with global id " << id << endl;
     cout << "\tCoordinates: " << x << " " << y << endl;
     cout << "\tVelocities: " << vel_x << " " << vel_y << endl;
     cout << "\tDimensions: " << w << " " << h << endl;

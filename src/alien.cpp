@@ -83,7 +83,7 @@ void Alien::update(double elapsed_time) {
 
 void Alien::shoot() {
     Projectile *p = new Projectile(x + (w >> 1), y - h - PROJECTILE_HEIGHT, S,
-            ALIEN_TYPE, id(), world);
+            ALIEN_TYPE, get_id(), world);
     entities.register_entity(p);
     DebugPrint("Allocated projectile with address %p by entity %d\n" _C_ p
             _C_ id());
@@ -95,7 +95,7 @@ void Alien::draw() {
 
 void Alien::print() {
     using namespace std;
-    cout << "Alien with global id " << my_id << endl;
+    cout << "Alien with global id " << id << endl;
     cout << "\tCoordinates: " << x << ' ' << y << endl;
     cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
     cout << "\tDimensions: " << w << ' ' << h << endl;

@@ -117,7 +117,7 @@ class SquadState : public State<Alien> {
 
 		if((new_x + w) > width || new_x < 0) {
 			int *info = new int(r);
-			dispatcher.broadcast(0, owner->id(), ALIEN_TYPE, MSG_SWAP_DIRECTION, info);
+			dispatcher.broadcast(0, owner->get_id(), ALIEN_TYPE, MSG_SWAP_DIRECTION, info);
 			delete info;
 			if(new_x < 0) {
 				owner->x = 0;
@@ -128,7 +128,7 @@ class SquadState : public State<Alien> {
 		}
 
 		if(new_y - h - VELOCITY_BAR_HEIGHT < 0) { // History ends...
-			dispatcher.broadcast(0, owner->id(), RECEIVER_TYPE_IRRELEVANT,
+			dispatcher.broadcast(0, owner->get_id(), RECEIVER_TYPE_IRRELEVANT,
 					MSG_ALIEN_GOT_TO_EARTH);
 		}
 
@@ -158,7 +158,7 @@ class SquadState : public State<Alien> {
 				owner->energy--;
 				if(owner->energy <= 0) {
 					owner->state_machine->change_state(&alien_explosion_state);
-					dispatcher.broadcast(0, owner->id(), RECEIVER_TYPE_IRRELEVANT,
+					dispatcher.broadcast(0, owner->get_id(), RECEIVER_TYPE_IRRELEVANT,
 							MSG_ALIEN_DESTROYED);
 				}
 				return true;

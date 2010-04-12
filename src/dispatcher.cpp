@@ -96,7 +96,7 @@ void MessageDispatcher::broadcast(double delay, int sender, int receiver_type, i
     if(receiver_type != RECEIVER_TYPE_IRRELEVANT) {
         for(it = entity_manager->entities.begin(); it != entity_manager->entities.end(); ++it) {
             temp = it->second;
-            if(temp->type() != receiver_type) {
+            if(temp->get_type() != receiver_type) {
                 continue;
             }
             dispatch_message(delay, sender, it->first, msg, extra_info);
