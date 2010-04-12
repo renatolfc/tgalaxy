@@ -30,43 +30,43 @@
 #include <gameobj.h>
 
 bool GameObj::collides(GameObj *other, int ignore) {
-	double x1r1, y1r1, x2r1, y2r1, x1r2, y1r2, x2r2, y2r2;
+    double x1r1, y1r1, x2r1, y2r1, x1r2, y1r2, x2r2, y2r2;
 
-	if(this == other) {
-		// Both are the same
-		return false;
-	}
+    if(this == other) {
+        // Both are the same
+        return false;
+    }
 
-	if(other->my_type == ignore) {
-		return false;
-	}
+    if(other->my_type == ignore) {
+        return false;
+    }
 
-	x1r1 = this->x;
-	y2r1 = this->y;
-	x2r1 = this->x+this->w;
-	y1r1 = this->y-this->h;
+    x1r1 = this->x;
+    y2r1 = this->y;
+    x2r1 = this->x+this->w;
+    y1r1 = this->y-this->h;
 
-	x1r2 = other->x;
-	y2r2 = other->y;
-	x2r2 = other->x+other->w;
-	y1r2 = other->y-other->h;
+    x1r2 = other->x;
+    y2r2 = other->y;
+    x2r2 = other->x+other->w;
+    y1r2 = other->y-other->h;
 
-	if(y2r1 < y1r2) {
-		return false;
-	}
+    if(y2r1 < y1r2) {
+        return false;
+    }
 
-	if(y1r1 > y2r2) {
-		return false;
-	}
+    if(y1r1 > y2r2) {
+        return false;
+    }
 
-	if(x2r1 < x1r2) {
-		return false;
-	}
+    if(x2r1 < x1r2) {
+        return false;
+    }
 
-	if(x1r1 > x2r2) {
-		return false;
-	}
+    if(x1r1 > x2r2) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 

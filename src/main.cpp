@@ -36,51 +36,21 @@
 
 Game *game;
 
-inline void idle_callback() {
-	game->update_game();
-}
-
-inline void keyboard_callback(unsigned char key, int x, int y) {
-	game->keyboard_callback(key, x, y);
-}
-
-inline void draw_scene_callback() {
-	game->draw_game();
-}
-
-inline void passive_motion_callback(int x, int y) {
-	game->passive_motion_callback(x, y);
-}
-
-inline void mouse_callback(int button, int state, int x, int y) {
-	game->mouse_callback(button, state, x, y);
-}
-
-inline void reshape_callback(int w, int h) {
-	game->reshape_callback(w, h);
-}
-
 inline void atexit_callback() {
-	delete game;
+    delete game;
 }
 
 int main(int argc, char **argv)
 {
-	game = new Game(argc, argv);
+    game = new Game(argc, argv);
 
-	Assert(game != NULL);
+    Assert(game != NULL);
 
-	atexit(atexit_callback);
+    atexit(atexit_callback);
+    atexit(SDL_Quit);
 
-	glutIdleFunc(idle_callback);
-	glutMouseFunc(mouse_callback);
-	glutReshapeFunc(reshape_callback);
-	glutKeyboardFunc(keyboard_callback);
-	glutDisplayFunc(draw_scene_callback);
-	glutPassiveMotionFunc(passive_motion_callback);
+    game->run();
 
-	glutMainLoop();
-
-	return 0;
+    return 0;
 }
 

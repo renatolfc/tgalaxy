@@ -33,95 +33,95 @@
 #include <font.h>
 
 void Printer::build_font() {
-	float cx, cy;
+    float cx, cy;
 
-	DebugPrint("Building font...\n");
+    DebugPrint("Building font...\n");
 
-	base = glGenLists(256);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	for (int i = 0; i < 256; i++) {
-		cx = float(i%16)/16.0f;
-		cy = float(i/16)/16.0f;
-		glNewList(base + i, GL_COMPILE);
+    base = glGenLists(256);
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    for (int i = 0; i < 256; i++) {
+        cx = float(i%16)/16.0f;
+        cy = float(i/16)/16.0f;
+        glNewList(base + i, GL_COMPILE);
 
-		glBegin(GL_QUADS);
-			glTexCoord2f(cx, 1 - cy - 0.0625f);
-			glVertex2i(0, 0);
+        glBegin(GL_QUADS);
+            glTexCoord2f(cx, 1 - cy - 0.0625f);
+            glVertex2i(0, 0);
 
-			glTexCoord2f(cx + 0.0625f, 1 - cy - 0.0625f);
-			glVertex2i(16, 0);
+            glTexCoord2f(cx + 0.0625f, 1 - cy - 0.0625f);
+            glVertex2i(16, 0);
 
-			glTexCoord2f(cx + 0.0625f, 1 - cy);
-			glVertex2i(16, 16);
+            glTexCoord2f(cx + 0.0625f, 1 - cy);
+            glVertex2i(16, 16);
 
-			glTexCoord2f(cx, 1 - cy);
-			glVertex2i(0, 16);
-		glEnd();
+            glTexCoord2f(cx, 1 - cy);
+            glVertex2i(0, 16);
+        glEnd();
 
-		glTranslated(10, 0, 0);
-		glEndList();
-	}
-	DebugPrint("Font built\n");
+        glTranslated(10, 0, 0);
+        glEndList();
+    }
+    DebugPrint("Font built\n");
 }
 
 void Printer::kill_font() {
-	glDeleteLists(base, 256);
+    glDeleteLists(base, 256);
 }
 
 void Printer::load_texture() {
-	glGenTextures(1, &texture[0]);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glGenTextures(1, &texture[0]);
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, font.bytes_per_pixel, font.width, 
-			font.height, 0, font.bytes_per_pixel == 3 ? GL_RGB :
-			GL_RGBA, GL_UNSIGNED_BYTE, font.pixel_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, font.bytes_per_pixel, font.width, 
+            font.height, 0, font.bytes_per_pixel == 3 ? GL_RGB :
+            GL_RGBA, GL_UNSIGNED_BYTE, font.pixel_data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	DebugPrint("Finished loading textures.\n");
+    DebugPrint("Finished loading textures.\n");
 }
 
 Printer::Printer() {
-	glEnable(GL_TEXTURE_2D);
-		load_texture();
-		build_font();
-	glDisable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
+        load_texture();
+        build_font();
+    glDisable(GL_TEXTURE_2D);
 }
 
 Printer::~Printer() {
-	glEnable(GL_TEXTURE_2D);
-		kill_font();
-	glDisable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
+        kill_font();
+    glDisable(GL_TEXTURE_2D);
 }
 
 void Printer::print(int x, int y, const char *string, int set) {
-	glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
 
-	if(set > 1) {
-		set = 1;
-	}
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+    if(set > 1) {
+        set = 1;
+    }
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0.0, (float)WINDOW_WIDTH, 0.0, (float)WINDOW_HEIGHT, -1.0, 1.0);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0.0, (float)WINDOW_WIDTH, 0.0, (float)WINDOW_HEIGHT, -1.0, 1.0);
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glTranslated(x, y, 0);
-	glListBase(base - 32 + (128 * set));
-	glCallLists(strlen(string), GL_BYTE, string);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glTranslated(x, y, 0);
+    glListBase(base - 32 + (128 * set));
+    glCallLists(strlen(string), GL_BYTE, string);
 
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 
 }
 

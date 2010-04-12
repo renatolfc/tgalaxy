@@ -37,26 +37,26 @@ const int STAR_WIDTH = 2;
 const int STAR_HEIGHT = 2;
 
 void Star::draw() {
-	glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
-	glColor3f(r, g, b);
+    glColor3f(r, g, b);
 
-	glBegin(GL_QUADS);
-	glVertex3f(x, y, -0.5);
-	glVertex3f(x + w, y, -0.5);
-	glVertex3f(x + w, y - h, -0.5);
-	glVertex3f(x, y - h, -0.5);
-	glEnd();
+    glBegin(GL_QUADS);
+    glVertex3f(x, y, -0.5);
+    glVertex3f(x + w, y, -0.5);
+    glVertex3f(x + w, y - h, -0.5);
+    glVertex3f(x, y - h, -0.5);
+    glEnd();
 
-	glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
 }
 
 void Star::print() {
-	using namespace std;
-	cout << "Star with global id " << my_id << endl;
-	cout << "\tCoordinates: " << x << " " << y << endl;
-	cout << "\tVelocities: " << vel_x << " " << vel_y << endl;
-	cout << "\tDimensions: " << w << " " << h << endl;
+    using namespace std;
+    cout << "Star with global id " << my_id << endl;
+    cout << "\tCoordinates: " << x << " " << y << endl;
+    cout << "\tVelocities: " << vel_x << " " << vel_y << endl;
+    cout << "\tDimensions: " << w << " " << h << endl;
 }
 
 

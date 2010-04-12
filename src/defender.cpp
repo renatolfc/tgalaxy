@@ -48,88 +48,88 @@ const int DEFENDER_DEFAULT_ENERGY = 3;
 
 void Defender::update(double elapsed_time) {
 
-	if(energy <= 0) { // Destroyed
-		dispatcher.broadcast(0, SENDER_ID_IRRELEVANT, RECEIVER_TYPE_IRRELEVANT,
-				MSG_DEFENDER_DESTROYED);
-	}
+    if(energy <= 0) { // Destroyed
+        dispatcher.broadcast(0, SENDER_ID_IRRELEVANT, RECEIVER_TYPE_IRRELEVANT,
+                MSG_DEFENDER_DESTROYED);
+    }
 
-	int width, height;
-	double new_x, new_y;
+    int width, height;
+    double new_x, new_y;
 
-	world->dimensions(width, height);
+    world->dimensions(width, height);
 
-	if(elapsed_time != 0) {
-		new_x = vel_x * elapsed_time + x;
-		new_y = vel_y * elapsed_time + y;
-	}
-	else {
-		new_x = x;
-		new_y = y;
-	}
+    if(elapsed_time != 0) {
+        new_x = vel_x * elapsed_time + x;
+        new_y = vel_y * elapsed_time + y;
+    }
+    else {
+        new_x = x;
+        new_y = y;
+    }
 
-	x = new_x;
-	y = new_y;
+    x = new_x;
+    y = new_y;
 
-	if(new_x < 0) {
-		x = 0;
-	}
+    if(new_x < 0) {
+        x = 0;
+    }
 
-	if(new_x + w > width) {
-		x = width - w;
-	}
+    if(new_x + w > width) {
+        x = width - w;
+    }
 
-	if(new_y > height) {
-		y = height;
-	}
+    if(new_y > height) {
+        y = height;
+    }
 
-	if(new_y - h < 0) {
-		y = h;
-	}
+    if(new_y - h < 0) {
+        y = h;
+    }
 }
 
 void Defender::print() {
-	using namespace std;
-	cout << "Defender (player) with global id " << my_id << endl;
-	cout << "\tCoordinates: " << x << ' ' << y << endl;
-	cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
-	cout << "\tDimensions: " << w << ' ' << h << endl;
+    using namespace std;
+    cout << "Defender (player) with global id " << my_id << endl;
+    cout << "\tCoordinates: " << x << ' ' << y << endl;
+    cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
+    cout << "\tDimensions: " << w << ' ' << h << endl;
 }
 
 void Defender::draw() {
-	glPixelZoom(1.0, -1.0);
-	glRasterPos2d(x1, y1);
-	glDrawPixels(defender_image.width, defender_image.height,
-			defender_image.bytes_per_pixel == 3 ? GL_RGB : GL_RGBA,
-			GL_UNSIGNED_BYTE, defender_image.pixel_data);
+    glPixelZoom(1.0, -1.0);
+    glRasterPos2d(x1, y1);
+    glDrawPixels(defender_image.width, defender_image.height,
+            defender_image.bytes_per_pixel == 3 ? GL_RGB : GL_RGBA,
+            GL_UNSIGNED_BYTE, defender_image.pixel_data);
 }
 
 void Defender::set_speed(int vx) {
-	vel_x = vx;
+    vel_x = vx;
 }
 
 void Defender::shoot() {
-	if(current_shots <= maximum_shots) {
-	   current_shots += 1;
-	   Projectile *p = new Projectile(x + (w >> 1), y, N, DEFENDER_TYPE, id(), world);
-	   entities.register_entity(p);
-	}
+    if(current_shots <= maximum_shots) {
+       current_shots += 1;
+       Projectile *p = new Projectile(x + (w >> 1), y, N, DEFENDER_TYPE, id(), world);
+       entities.register_entity(p);
+    }
 }
 
 bool Defender::handle_message(const Telegram &msg) {
-	switch(msg.msg) {
-		case MSG_PROJECTILE_DESTROYED:
-			{
-				current_shots -= 1;
-				return true;
-			}
-		case MSG_BEEN_HIT:
-			{
-				energy -= 1;
-				DebugPrint("Defender has been hit. Current energy: %d\n" _C_ energy);
-				return true;
-			}
-	}
-	return false;
+    switch(msg.msg) {
+        case MSG_PROJECTILE_DESTROYED:
+            {
+                current_shots -= 1;
+                return true;
+            }
+        case MSG_BEEN_HIT:
+            {
+                energy -= 1;
+                DebugPrint("Defender has been hit. Current energy: %d\n" _C_ energy);
+                return true;
+            }
+    }
+    return false;
 }
 
 #undef x1

@@ -48,65 +48,65 @@ const double SEND_MESSAGE_IMMEDIATELY = 0.0;
 
 void MessageDispatcher::discharge(GameObj *receiver, const Telegram &msg)
 {
-	if(receiver == NULL) {
-		DebugPrint("Receiver doesn't exist anymore\n");
-	}
-	if(!receiver->handle_message(msg)) {
-		DebugPrint("Message %d not handled.\n" _C_ msg.msg);
-	}
+    if(receiver == NULL) {
+        DebugPrint("Receiver doesn't exist anymore\n");
+    }
+    if(!receiver->handle_message(msg)) {
+        DebugPrint("Message %d not handled.\n" _C_ msg.msg);
+    }
 }
 
 void MessageDispatcher::dispatch_message(double delay,
-		int sender, int receiver, int msg, void *extra_info = NULL)
+        int sender, int receiver, int msg, void *extra_info = NULL)
 {
-	GameObj *preceiver = entity_manager->get_entity_from_id(receiver);
+    GameObj *preceiver = entity_manager->get_entity_from_id(receiver);
 
-	if(entity_manager->reset) {
-		return;
-	}
+    if(entity_manager->reset) {
+        return;
+    }
 
-	if(preceiver == NULL) {
-		DebugPrint("No receiver with ID %d\n" _C_ receiver);
-		return;
-	}
+    if(preceiver == NULL) {
+        DebugPrint("No receiver with ID %d\n" _C_ receiver);
+        return;
+    }
 
-	Telegram telegram(0, sender, receiver, msg, extra_info);
+    Telegram telegram(0, sender, receiver, msg, extra_info);
 
-	if(delay <= 0.0) {
-		DebugPrint("Telegram dispatched by %d for %d with ID %d\n"
-				_C_ sender _C_ receiver _C_ msg);
-		discharge(preceiver, telegram);
-	}
-	else {
-		// Not implemented
-		DebugPrint("Delayed telegrams not implemented. Sending anyway.\n");
-		DebugPrint("Telegram dispatched by %d for %d with ID %d\n"
-				_C_ sender _C_ receiver _C_ msg);
-		discharge(preceiver, telegram);
-	}
+    if(delay <= 0.0) {
+        DebugPrint("Telegram dispatched by %d for %d with ID %d\n"
+                _C_ sender _C_ receiver _C_ msg);
+        discharge(preceiver, telegram);
+    }
+    else {
+        // Not implemented
+        DebugPrint("Delayed telegrams not implemented. Sending anyway.\n");
+        DebugPrint("Telegram dispatched by %d for %d with ID %d\n"
+                _C_ sender _C_ receiver _C_ msg);
+        discharge(preceiver, telegram);
+    }
 }
 
 void MessageDispatcher::dispatch_delayed_messages() {
 }
 
 void MessageDispatcher::broadcast(double delay, int sender, int receiver_type, int msg, void *extra_info) {
-	map<int, GameObj *>::const_iterator it;
-	GameObj *temp;
+    map<int, GameObj *>::const_iterator it;
+    GameObj *temp;
 
-	if(receiver_type != RECEIVER_TYPE_IRRELEVANT) {
-		for(it = entity_manager->entities.begin(); it != entity_manager->entities.end(); ++it) {
-			temp = it->second;
-			if(temp->type() != receiver_type) {
-				continue;
-			}
-			dispatch_message(delay, sender, it->first, msg, extra_info);
-		}
-	}
+    if(receiver_type != RECEIVER_TYPE_IRRELEVANT) {
+        for(it = entity_manager->entities.begin(); it != entity_manager->entities.end(); ++it) {
+            temp = it->second;
+            if(temp->type() != receiver_type) {
+                continue;
+            }
+            dispatch_message(delay, sender, it->first, msg, extra_info);
+        }
+    }
 
-	if(world != NULL) {
-		// Read the note in MessageDispatcher::subscribe_game
-		world->handle_message(msg, sender, receiver_type, extra_info);
-	}
+    if(world != NULL) {
+        // Read the note in MessageDispatcher::subscribe_game
+        world->handle_message(msg, sender, receiver_type, extra_info);
+    }
 
 }
 

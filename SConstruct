@@ -77,7 +77,8 @@ env.MergeFlags(include_paths)
 conf = Configure(env)
 
 CheckOpenGL(env, conf)
-CheckGLUT(env, conf)
+env.ParseConfig('sdl-config --cflags')
+env.ParseConfig('sdl-config --libs')
 
 env = conf.Finish()
 

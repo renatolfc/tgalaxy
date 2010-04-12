@@ -35,149 +35,149 @@
 EntityManager entities;
 
 GameObj *EntityManager::get_entity_from_id(int id) const {
-	EntityMap::const_iterator ent = entities.find(id);
+    EntityMap::const_iterator ent = entities.find(id);
 
-	if(ent == entities.end()) {
-		return NULL;
-	}
+    if(ent == entities.end()) {
+        return NULL;
+    }
 
-	return ent->second;
+    return ent->second;
 }
 
 bool EntityManager::remove_entity(GameObj *entity) {
-	if(updating) {
-		remove_buffer.push(entity);
-	}
-	else {
-		EntityMap::const_iterator ent = entities.find(entity->id());
-		if(ent != entities.end()) {
-			entities.erase(ent->first);
-			return true;
-		}
-		return false;
-//		DebugPrint("Erasing entity with id: %d\n" _C_ entity->id());
-	}
-	return false;
+    if(updating) {
+        remove_buffer.push(entity);
+    }
+    else {
+        EntityMap::const_iterator ent = entities.find(entity->id());
+        if(ent != entities.end()) {
+            entities.erase(ent->first);
+            return true;
+        }
+        return false;
+//      DebugPrint("Erasing entity with id: %d\n" _C_ entity->id());
+    }
+    return false;
 }
 
 void EntityManager::destroy_entity(GameObj *entity) {
-	if(updating) {
-		delete_buffer.push(entity);
-	}
-	else {
-		if(remove_entity(entity)) {
-			delete entity;
-		}
-		else {
-			DebugPrint("No entity to deallocate at address %p\n" _C_ entity);
-		}
-	}
+    if(updating) {
+        delete_buffer.push(entity);
+    }
+    else {
+        if(remove_entity(entity)) {
+            delete entity;
+        }
+        else {
+            DebugPrint("No entity to deallocate at address %p\n" _C_ entity);
+        }
+    }
 }
 
 void EntityManager::register_entity(GameObj *new_entity) {
-//	DebugPrint("Registering entity with address %p\n" _C_ new_entity);
-	if(updating) {
-		insert_buffer.push(new_entity);
-	}
-	else {
-		entities.insert(std::make_pair(new_entity->id(), new_entity));
-	}
+//  DebugPrint("Registering entity with address %p\n" _C_ new_entity);
+    if(updating) {
+        insert_buffer.push(new_entity);
+    }
+    else {
+        entities.insert(std::make_pair(new_entity->id(), new_entity));
+    }
 }
 
 GameObj *EntityManager::check_collision(GameObj *requester, int ignore) {
-	GameObj *temp;
-	std::map<int, GameObj *>::const_iterator itr;
+    GameObj *temp;
+    std::map<int, GameObj *>::const_iterator itr;
 
-	for(itr = entities.begin(); itr != entities.end(); ++itr) {
-		temp = (*itr).second;
+    for(itr = entities.begin(); itr != entities.end(); ++itr) {
+        temp = (*itr).second;
 
-		if(requester->collides(temp, ignore)) {
-			if(temp->type() == STAR_TYPE) {
-				continue;
-			}
-			if(temp->type() == ALIEN_TYPE) {
-				Alien *a = dynamic_cast<Alien *>(temp);
-				if(a->current_energy() <= 0) {
-					continue;
-				}
-			}
-			return temp;
-		}
-	}
+        if(requester->collides(temp, ignore)) {
+            if(temp->type() == STAR_TYPE) {
+                continue;
+            }
+            if(temp->type() == ALIEN_TYPE) {
+                Alien *a = dynamic_cast<Alien *>(temp);
+                if(a->current_energy() <= 0) {
+                    continue;
+                }
+            }
+            return temp;
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 void EntityManager::update_all(double elapsed_time) {
-	GameObj *temp;
-	std::map<int, GameObj *>::const_iterator itr;
+    GameObj *temp;
+    std::map<int, GameObj *>::const_iterator itr;
 
-	if(reset) {
-		reset = false;
-	}
+    if(reset) {
+        reset = false;
+    }
 
-	updating = true;
-	for(itr = entities.begin(); itr != entities.end(); itr++) {
+    updating = true;
+    for(itr = entities.begin(); itr != entities.end(); itr++) {
 
-		if(reset) {
-			return;
-		}
+        if(reset) {
+            return;
+        }
 
-		temp = (*itr).second;
-		if(temp != NULL) {
-			temp->update(elapsed_time);
-		}
-	}
-	updating = false;
+        temp = (*itr).second;
+        if(temp != NULL) {
+            temp->update(elapsed_time);
+        }
+    }
+    updating = false;
 
-	while(!insert_buffer.empty()) {
-		this->register_entity(insert_buffer.front());
-		insert_buffer.pop();
-	}
+    while(!insert_buffer.empty()) {
+        this->register_entity(insert_buffer.front());
+        insert_buffer.pop();
+    }
 
-	while(!delete_buffer.empty()) {
-		this->destroy_entity(delete_buffer.front());
-		delete_buffer.pop();
-	}
+    while(!delete_buffer.empty()) {
+        this->destroy_entity(delete_buffer.front());
+        delete_buffer.pop();
+    }
 
-	while(!remove_buffer.empty()) {
-		this->remove_entity(remove_buffer.front());
-		remove_buffer.pop();
-	}
+    while(!remove_buffer.empty()) {
+        this->remove_entity(remove_buffer.front());
+        remove_buffer.pop();
+    }
 }
 
 void EntityManager::draw_all() {
-	GameObj *temp;
-	std::map<int, GameObj *>::reverse_iterator rit;
+    GameObj *temp;
+    std::map<int, GameObj *>::reverse_iterator rit;
 
-	for(rit = entities.rbegin(); rit != entities.rend(); ++rit) {
-		// Iterating backwards because projectiles are registered later
-		temp = (*rit).second;
-		temp->draw();
-	}
+    for(rit = entities.rbegin(); rit != entities.rend(); ++rit) {
+        // Iterating backwards because projectiles are registered later
+        temp = (*rit).second;
+        temp->draw();
+    }
 }
 
 void EntityManager::print_all() {
-	GameObj *temp;
-	std::map<int, GameObj *>::const_iterator itr;
+    GameObj *temp;
+    std::map<int, GameObj *>::const_iterator itr;
 
-	for(itr = entities.begin(); itr != entities.end(); ++itr) {
-		temp = (*itr).second;
-		temp->print();
-	}
+    for(itr = entities.begin(); itr != entities.end(); ++itr) {
+        temp = (*itr).second;
+        temp->print();
+    }
 }
 
 void EntityManager::destroy_all() {
-	GameObj *temp;
-	std::map<int, GameObj *>::const_iterator itr;
+    GameObj *temp;
+    std::map<int, GameObj *>::const_iterator itr;
 
-	reset = true;
+    reset = true;
 
-	for(itr = entities.begin(); itr != entities.end(); ++itr) {
-		temp = (*itr).second;
-		delete temp;
-	}
+    for(itr = entities.begin(); itr != entities.end(); ++itr) {
+        temp = (*itr).second;
+        delete temp;
+    }
 
-	entities.clear();
+    entities.clear();
 }
 

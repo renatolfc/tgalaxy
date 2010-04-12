@@ -53,56 +53,56 @@ const int ALIEN_SPACING = 10;
 #define y2 y-h
 
 Alien::Alien(int row, int col, GameWorld *w) : 
-	GameObj(ALIEN_TYPE,
-			col_to_x(col),
-			row_to_y(row),
-			DEFAULT_X_SPEED, DEFAULT_Y_SPEED,
-			ALIEN_WIDTH,
-			ALIEN_HEIGHT)
-		{
-			Assert(w);
-			world = w;
-			state_machine = new StateMachine<Alien>(this);
-			state_machine->set_current_state(&alien_squad_state);
-			etime = 0;
-			accumulated_time = 0;
-			current_animation_frame = 0;
-			direction = RIGHT;
-			c = col;
-			r = row;
-			energy = DEFAULT_ALIEN_ENERGY;
-		}
+    GameObj(ALIEN_TYPE,
+            col_to_x(col),
+            row_to_y(row),
+            DEFAULT_X_SPEED, DEFAULT_Y_SPEED,
+            ALIEN_WIDTH,
+            ALIEN_HEIGHT)
+        {
+            Assert(w);
+            world = w;
+            state_machine = new StateMachine<Alien>(this);
+            state_machine->set_current_state(&alien_squad_state);
+            etime = 0;
+            accumulated_time = 0;
+            current_animation_frame = 0;
+            direction = RIGHT;
+            c = col;
+            r = row;
+            energy = DEFAULT_ALIEN_ENERGY;
+        }
 
 
 void Alien::update(double elapsed_time) {
-	etime = elapsed_time;
-	accumulated_time += etime;
+    etime = elapsed_time;
+    accumulated_time += etime;
 
-	state_machine->update();
+    state_machine->update();
 }
 
 void Alien::shoot() {
-	Projectile *p = new Projectile(x + (w >> 1), y - h - PROJECTILE_HEIGHT, S,
-			ALIEN_TYPE, id(), world);
-	entities.register_entity(p);
-	DebugPrint("Allocated projectile with address %p by entity %d\n" _C_ p
-			_C_ id());
+    Projectile *p = new Projectile(x + (w >> 1), y - h - PROJECTILE_HEIGHT, S,
+            ALIEN_TYPE, id(), world);
+    entities.register_entity(p);
+    DebugPrint("Allocated projectile with address %p by entity %d\n" _C_ p
+            _C_ id());
 }
 
 void Alien::draw() {
-	state_machine->draw();
+    state_machine->draw();
 }
 
 void Alien::print() {
-	using namespace std;
-	cout << "Alien with global id " << my_id << endl;
-	cout << "\tCoordinates: " << x << ' ' << y << endl;
-	cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
-	cout << "\tDimensions: " << w << ' ' << h << endl;
+    using namespace std;
+    cout << "Alien with global id " << my_id << endl;
+    cout << "\tCoordinates: " << x << ' ' << y << endl;
+    cout << "\tVelocities: " << vel_x << ' ' << vel_y << endl;
+    cout << "\tDimensions: " << w << ' ' << h << endl;
 }
 
 bool Alien::handle_message(const Telegram &msg) {
-	return state_machine->handle_message(msg);
+    return state_machine->handle_message(msg);
 }
 
 #undef x1
