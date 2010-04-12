@@ -34,22 +34,13 @@
 #include <tgalaxy.h>
 #include <game.h>
 
-Game *game;
-
-inline void atexit_callback() {
-    delete game;
-}
-
 int main(int argc, char **argv)
 {
-    game = new Game(argc, argv);
+    Game game(argc, argv);
 
-    Assert(game != NULL);
-
-    atexit(atexit_callback);
     atexit(SDL_Quit);
 
-    game->run();
+    game.run();
 
     return 0;
 }
